@@ -10,21 +10,27 @@
 [ext_resource type="AudioStreamOggVorbis" uid="uid://cat5w2hrhu5uo" path="res://assets/sounds/sfx_die.ogg" id="8_die"]
 [ext_resource type="AudioStreamOggVorbis" uid="uid://by1ra1sb82pev" path="res://assets/sounds/sfx_point.ogg" id="9_point"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bg"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_bg_day"]
 atlas = ExtResource("1_atlas")
 region = Rect2(0, 0, 288, 512)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bg_night"]
+atlas = ExtResource("1_atlas")
+region = Rect2(292, 0, 288, 512)
 filter_clip = true
 
 [node name="World" type="Node2D"]
 script = ExtResource("2_world")
 
 [node name="Background" type="Sprite2D" parent="."]
-texture = SubResource("AtlasTexture_bg")
+texture = SubResource("AtlasTexture_bg_day")
 centered = false
 
 [node name="GameLayer" type="Node2D" parent="."]
 
 [node name="Bird" parent="GameLayer" instance=ExtResource("3_bird")]
+z_index = 1
 position = Vector2(60, 200)
 
 [node name="PipeSpawner" type="Node2D" parent="GameLayer"]

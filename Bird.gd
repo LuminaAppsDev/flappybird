@@ -7,6 +7,7 @@ signal hit
 @export var flap_impulse: float = -280.0
 @export var max_fall_speed: float = 400.0
 @export var rotation_speed: float = 2.5
+@export var ground_y: float = 388.0
 
 var velocity: float = 0.0
 var alive: bool = true
@@ -14,6 +15,7 @@ var alive: bool = true
 var _active: bool = false
 var _hover_time: float = 0.0
 var _start_y: float = 0.0
+var _dead_falling: bool = false
 
 
 func _ready() -> void:
@@ -22,6 +24,17 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _dead_falling:
+		velocity += fall_gravity * delta
+		velocity = min(velocity, max_fall_speed)
+		position.y += velocity * delta
+		_update_rotation(delta)
+		if position.y >= ground_y:
+			position.y = ground_y
+			velocity = 0.0
+			_dead_falling = false
+		return
+
 	if not _active:
 		if alive:
 			_hover_time += delta
@@ -50,9 +63,10 @@ func start() -> void:
 	$AnimatedSprite2D.play(&"flap")
 
 
-func stop() -> void:
+func die() -> void:
 	_active = false
 	alive = false
+	_dead_falling = true
 	$AnimatedSprite2D.stop()
 
 
@@ -63,6 +77,7 @@ func reset(start_position: Vector2) -> void:
 	rotation = 0.0
 	_hover_time = 0.0
 	_active = false
+	_dead_falling = false
 	alive = true
 	$AnimatedSprite2D.play(&"flap")
 
