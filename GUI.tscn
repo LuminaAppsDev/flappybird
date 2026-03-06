@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="CompressedTexture2D" uid="uid://ccmjan2kr454f" path="res://assets/gfx/atlas.png" id="1_atlas"]
 [ext_resource type="Script" path="res://GUI.gd" id="2_script"]
@@ -36,6 +36,16 @@ filter_clip = true
 [sub_resource type="AtlasTexture" id="AtlasTexture_copyright"]
 atlas = ExtResource("1_atlas")
 region = Rect2(884, 182, 126, 14)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_panel"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 516, 238, 126)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_new"]
+atlas = ExtResource("1_atlas")
+region = Rect2(224, 1002, 32, 14)
 filter_clip = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gameover"]
@@ -131,18 +141,47 @@ mouse_filter = 2
 
 [node name="GameOverText" type="TextureRect" parent="GameOverScreen"]
 offset_left = 42.0
-offset_top = 73.0
+offset_top = 120.0
 offset_right = 246.0
-offset_bottom = 127.0
+offset_bottom = 174.0
 texture = SubResource("AtlasTexture_gameover")
 mouse_filter = 2
 
-[node name="RetryButton" type="TextureButton" parent="GameOverScreen"]
-offset_left = 86.0
-offset_top = 315.0
-offset_right = 202.0
-offset_bottom = 385.0
+[node name="PanelContainer" type="Node2D" parent="GameOverScreen"]
+position = Vector2(25, 186)
+
+[node name="PanelBg" type="Sprite2D" parent="GameOverScreen/PanelContainer"]
+texture = SubResource("AtlasTexture_panel")
+centered = false
+
+[node name="Medal" type="Sprite2D" parent="GameOverScreen/PanelContainer"]
+position = Vector2(55, 64)
+visible = false
+
+[node name="CurrentScore" type="Node2D" parent="GameOverScreen/PanelContainer"]
+position = Vector2(210, 46)
+
+[node name="BestScore" type="Node2D" parent="GameOverScreen/PanelContainer"]
+position = Vector2(210, 89)
+
+[node name="NewBadge" type="Sprite2D" parent="GameOverScreen/PanelContainer"]
+position = Vector2(157, 82)
+visible = false
+texture = SubResource("AtlasTexture_new")
+
+[node name="PlayButton" type="TextureButton" parent="GameOverScreen"]
+offset_left = 24.0
+offset_top = 340.0
+offset_right = 140.0
+offset_bottom = 400.0
 texture_normal = SubResource("AtlasTexture_play")
 
+[node name="ScoreButton" type="TextureButton" parent="GameOverScreen"]
+offset_left = 148.0
+offset_top = 340.0
+offset_right = 264.0
+offset_bottom = 400.0
+texture_normal = SubResource("AtlasTexture_score")
+
 [connection signal="pressed" from="TitleScreen/PlayButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="GameOverScreen/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="GameOverScreen/PlayButton" to="." method="_on_retry_button_pressed"]

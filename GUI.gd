@@ -4,17 +4,30 @@ extends CanvasLayer
 signal play_pressed
 signal retry_pressed
 
+const SAVE_PATH := "user://highscore.cfg"
+
 var _atlas: Texture2D = preload("res://assets/gfx/atlas.png")
 var _digit_regions: Array[Rect2] = []
+var _panel_digit_regions: Array[Rect2] = []
+var _medal_regions: Array[Rect2] = []
+var _best_score: int = 0
 
 @onready var _title_screen: Control = $TitleScreen
 @onready var _get_ready_screen: Control = $GetReadyScreen
 @onready var _score_container: Node2D = $ScoreContainer
 @onready var _game_over_screen: Control = $GameOverScreen
+@onready var _panel_container: Node2D = $GameOverScreen/PanelContainer
+@onready var _medal_sprite: Sprite2D = $GameOverScreen/PanelContainer/Medal
+@onready var _current_score_node: Node2D = $GameOverScreen/PanelContainer/CurrentScore
+@onready var _best_score_node: Node2D = $GameOverScreen/PanelContainer/BestScore
+@onready var _new_badge: Sprite2D = $GameOverScreen/PanelContainer/NewBadge
 
 
 func _ready() -> void:
 	_init_digit_regions()
+	_init_panel_regions()
+	_setup_button_press_offsets()
+	_load_best_score()
 
 
 func show_title() -> void:
@@ -39,10 +52,20 @@ func show_hud() -> void:
 	_game_over_screen.visible = false
 
 
-func show_game_over(_final_score: int) -> void:
+func show_game_over(final_score: int) -> void:
+	var is_new_best := final_score > _best_score
+	if is_new_best:
+		_best_score = final_score
+		_save_best_score()
+
 	_get_ready_screen.visible = false
 	_score_container.visible = false
 	_game_over_screen.visible = true
+
+	_render_panel_digits(_current_score_node, final_score)
+	_render_panel_digits(_best_score_node, _best_score)
+	_update_medal(final_score)
+	_new_badge.visible = is_new_best
 
 
 func update_score(value: int) -> void:
@@ -67,6 +90,52 @@ func update_score(value: int) -> void:
 		x_offset += _digit_regions[idx].size.x + 2.0
 
 
+func _render_panel_digits(container: Node2D, value: int) -> void:
+	for child in container.get_children():
+		child.queue_free()
+
+	var digits: String = str(value)
+	var digit_w: float = 16.0
+	var spacing: float = 1.0
+	var total_width: float = digits.length() * digit_w
+	total_width += (digits.length() - 1) * spacing
+	var x_offset: float = -total_width
+
+	for i in digits.length():
+		var idx: int = digits.unicode_at(i) - 48
+		var sprite := Sprite2D.new()
+		var tex := AtlasTexture.new()
+		tex.atlas = _atlas
+		tex.region = _panel_digit_regions[idx]
+		tex.filter_clip = true
+		sprite.texture = tex
+		sprite.centered = false
+		sprite.position = Vector2(x_offset, -10.0)
+		container.add_child(sprite)
+		x_offset += digit_w + spacing
+
+
+func _update_medal(score: int) -> void:
+	if score < 10:
+		_medal_sprite.visible = false
+		return
+	_medal_sprite.visible = true
+	var medal_idx: int
+	if score >= 40:
+		medal_idx = 0
+	elif score >= 30:
+		medal_idx = 1
+	elif score >= 20:
+		medal_idx = 2
+	else:
+		medal_idx = 3
+	var tex := AtlasTexture.new()
+	tex.atlas = _atlas
+	tex.region = _medal_regions[medal_idx]
+	tex.filter_clip = true
+	_medal_sprite.texture = tex
+
+
 func _calculate_score_width(digits: String) -> float:
 	var total: float = 0.0
 	for i in digits.length():
@@ -89,6 +158,55 @@ func _init_digit_regions() -> void:
 		Rect2(640, 364, 24, 44),
 		Rect2(668, 364, 24, 44),
 	]
+
+
+func _init_panel_regions() -> void:
+	_panel_digit_regions = [
+		Rect2(272, 612, 16, 20),
+		Rect2(272, 954, 16, 20),
+		Rect2(272, 978, 16, 20),
+		Rect2(260, 1002, 16, 20),
+		Rect2(1002, 0, 16, 20),
+		Rect2(1002, 24, 16, 20),
+		Rect2(1008, 52, 16, 20),
+		Rect2(1008, 84, 16, 20),
+		Rect2(584, 484, 16, 20),
+		Rect2(620, 412, 16, 20),
+	]
+	_medal_regions = [
+		Rect2(242, 516, 44, 44),
+		Rect2(242, 564, 44, 44),
+		Rect2(224, 906, 44, 44),
+		Rect2(224, 954, 44, 44),
+	]
+
+
+func _load_best_score() -> void:
+	var config := ConfigFile.new()
+	if config.load(SAVE_PATH) == OK:
+		_best_score = config.get_value("score", "best", 0)
+
+
+func _save_best_score() -> void:
+	var config := ConfigFile.new()
+	config.set_value("score", "best", _best_score)
+	config.save(SAVE_PATH)
+
+
+func _setup_button_press_offsets() -> void:
+	for screen in [_title_screen, _game_over_screen]:
+		for child in screen.get_children():
+			if child is TextureButton:
+				child.button_down.connect(_on_button_down.bind(child))
+				child.button_up.connect(_on_button_up.bind(child))
+
+
+func _on_button_down(button: TextureButton) -> void:
+	button.position.y += 1.0
+
+
+func _on_button_up(button: TextureButton) -> void:
+	button.position.y -= 1.0
 
 
 func _on_play_button_pressed() -> void:
