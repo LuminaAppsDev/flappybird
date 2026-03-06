@@ -1,0 +1,54 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="CompressedTexture2D" uid="uid://ccmjan2kr454f" path="res://assets/gfx/atlas.png" id="1_atlas"]
+[ext_resource type="Script" path="res://PipePair.gd" id="2_script"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_down"]
+atlas = ExtResource("1_atlas")
+region = Rect2(112, 646, 52, 320)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_up"]
+atlas = ExtResource("1_atlas")
+region = Rect2(168, 646, 52, 320)
+filter_clip = true
+
+[sub_resource type="RectangleShape2D" id="RectShape_pipe"]
+size = Vector2(52, 320)
+
+[sub_resource type="RectangleShape2D" id="RectShape_score"]
+size = Vector2(10, 100)
+
+[node name="PipePair" type="Node2D"]
+script = ExtResource("2_script")
+
+[node name="TopPipe" type="StaticBody2D" parent="."]
+position = Vector2(0, -210)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="TopPipe"]
+texture = SubResource("AtlasTexture_down")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopPipe"]
+shape = SubResource("RectShape_pipe")
+
+[node name="BottomPipe" type="StaticBody2D" parent="."]
+position = Vector2(0, 210)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="BottomPipe"]
+texture = SubResource("AtlasTexture_up")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomPipe"]
+shape = SubResource("RectShape_pipe")
+
+[node name="ScoreZone" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ScoreZone"]
+shape = SubResource("RectShape_score")
+
+[connection signal="area_entered" from="ScoreZone" to="." method="_on_score_zone_area_entered"]

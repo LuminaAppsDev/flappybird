@@ -1,0 +1,111 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="CompressedTexture2D" uid="uid://ccmjan2kr454f" path="res://assets/gfx/atlas.png" id="1_atlas"]
+[ext_resource type="Script" path="res://GUI.gd" id="2_script"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_title"]
+atlas = ExtResource("1_atlas")
+region = Rect2(702, 182, 178, 48)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_play"]
+atlas = ExtResource("1_atlas")
+region = Rect2(702, 234, 116, 70)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ready"]
+atlas = ExtResource("1_atlas")
+region = Rect2(584, 116, 196, 62)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tutorial"]
+atlas = ExtResource("1_atlas")
+region = Rect2(584, 182, 114, 98)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gameover"]
+atlas = ExtResource("1_atlas")
+region = Rect2(784, 116, 204, 54)
+filter_clip = true
+
+[node name="GUI" type="CanvasLayer"]
+script = ExtResource("2_script")
+
+[node name="TitleScreen" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Title" type="TextureRect" parent="TitleScreen"]
+offset_left = 55.0
+offset_top = 106.0
+offset_right = 233.0
+offset_bottom = 154.0
+texture = SubResource("AtlasTexture_title")
+mouse_filter = 2
+
+[node name="PlayButton" type="TextureButton" parent="TitleScreen"]
+offset_left = 86.0
+offset_top = 305.0
+offset_right = 202.0
+offset_bottom = 375.0
+texture_normal = SubResource("AtlasTexture_play")
+
+[node name="GetReadyScreen" type="Control" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ReadyText" type="TextureRect" parent="GetReadyScreen"]
+offset_left = 46.0
+offset_top = 109.0
+offset_right = 242.0
+offset_bottom = 171.0
+texture = SubResource("AtlasTexture_ready")
+mouse_filter = 2
+
+[node name="Tutorial" type="TextureRect" parent="GetReadyScreen"]
+offset_left = 87.0
+offset_top = 201.0
+offset_right = 201.0
+offset_bottom = 299.0
+texture = SubResource("AtlasTexture_tutorial")
+mouse_filter = 2
+
+[node name="ScoreContainer" type="Node2D" parent="."]
+visible = false
+position = Vector2(144, 50)
+
+[node name="GameOverScreen" type="Control" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="GameOverText" type="TextureRect" parent="GameOverScreen"]
+offset_left = 42.0
+offset_top = 73.0
+offset_right = 246.0
+offset_bottom = 127.0
+texture = SubResource("AtlasTexture_gameover")
+mouse_filter = 2
+
+[node name="RetryButton" type="TextureButton" parent="GameOverScreen"]
+offset_left = 86.0
+offset_top = 315.0
+offset_right = 202.0
+offset_bottom = 385.0
+texture_normal = SubResource("AtlasTexture_play")
+
+[connection signal="pressed" from="TitleScreen/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="GameOverScreen/RetryButton" to="." method="_on_retry_button_pressed"]

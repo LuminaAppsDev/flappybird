@@ -11,8 +11,17 @@ config_version=5
 [application]
 
 config/name="FlappyBird2026"
+run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=288
+window/size/viewport_height=512
+window/size/window_width_override=576
+window/size/window_height_override=1024
+window/stretch/mode="canvas_items"
 
 [physics]
 
@@ -20,5 +29,6 @@ config/icon="res://icon.svg"
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"

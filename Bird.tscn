@@ -1,0 +1,56 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="CompressedTexture2D" uid="uid://ccmjan2kr454f" path="res://assets/gfx/atlas.png" id="1_atlas"]
+[ext_resource type="Script" path="res://Bird.gd" id="2_script"]
+[ext_resource type="AudioStreamOggVorbis" uid="uid://btb80cnn3mskh" path="res://assets/sounds/sfx_wing.ogg" id="3_flap"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(0, 970, 48, 48)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(56, 970, 48, 48)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(112, 970, 48, 48)
+filter_clip = true
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bird"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2")
+}],
+"loop": true,
+"name": &"flap",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectShape_bird"]
+size = Vector2(30, 24)
+
+[node name="Bird" type="Area2D"]
+collision_layer = 1
+collision_mask = 2
+script = ExtResource("2_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_bird")
+animation = &"flap"
+autoplay = "flap"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectShape_bird")
+
+[node name="FlapSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_flap")
