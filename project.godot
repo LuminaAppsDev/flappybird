@@ -14,7 +14,7 @@ config/name="FlappyBird2026"
 run/main_scene="res://Main.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/image="uid://chtsevqmaiu8x"
-config/icon="res://icon.svg"
+config/icon="uid://b7wa5dxbaihp7"
 
 [display]
 
@@ -33,3 +33,4 @@ window/stretch/mode="canvas_items"
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
