@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="CompressedTexture2D" uid="uid://ccmjan2kr454f" path="res://assets/gfx/atlas.png" id="1_atlas"]
 [ext_resource type="Script" path="res://GUI.gd" id="2_script"]
@@ -31,6 +31,11 @@ filter_clip = true
 [sub_resource type="AtlasTexture" id="AtlasTexture_rate"]
 atlas = ExtResource("1_atlas")
 region = Rect2(924, 0, 74, 48)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_copyright"]
+atlas = ExtResource("1_atlas")
+region = Rect2(884, 182, 126, 14)
 filter_clip = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gameover"]
@@ -77,6 +82,14 @@ offset_top = 340.0
 offset_right = 264.0
 offset_bottom = 400.0
 texture_normal = SubResource("AtlasTexture_score")
+
+[node name="Copyright" type="TextureRect" parent="TitleScreen"]
+offset_left = 81.0
+offset_top = 420.0
+offset_right = 207.0
+offset_bottom = 420.0
+texture = SubResource("AtlasTexture_copyright")
+mouse_filter = 2
 
 [node name="GetReadyScreen" type="Control" parent="."]
 visible = false
