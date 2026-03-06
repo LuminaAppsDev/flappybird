@@ -39,6 +39,7 @@ func _is_tap(event: InputEvent) -> bool:
 func _enter_title() -> void:
 	_state = State.TITLE
 	_world.reset()
+	_world.bird.position.x = 144.0
 	_gui.show_title()
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="CompressedTexture2D" uid="uid://ccmjan2kr454f" path="res://assets/gfx/atlas.png" id="1_atlas"]
 [ext_resource type="Script" path="res://GUI.gd" id="2_script"]
@@ -21,6 +21,16 @@ filter_clip = true
 [sub_resource type="AtlasTexture" id="AtlasTexture_tutorial"]
 atlas = ExtResource("1_atlas")
 region = Rect2(584, 182, 114, 98)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_score"]
+atlas = ExtResource("1_atlas")
+region = Rect2(822, 234, 116, 70)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rate"]
+atlas = ExtResource("1_atlas")
+region = Rect2(924, 0, 74, 48)
 filter_clip = true
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gameover"]
@@ -47,12 +57,26 @@ offset_bottom = 154.0
 texture = SubResource("AtlasTexture_title")
 mouse_filter = 2
 
+[node name="RateButton" type="TextureButton" parent="TitleScreen"]
+offset_left = 107.0
+offset_top = 274.0
+offset_right = 181.0
+offset_bottom = 322.0
+texture_normal = SubResource("AtlasTexture_rate")
+
 [node name="PlayButton" type="TextureButton" parent="TitleScreen"]
-offset_left = 86.0
-offset_top = 305.0
-offset_right = 202.0
-offset_bottom = 375.0
+offset_left = 24.0
+offset_top = 340.0
+offset_right = 140.0
+offset_bottom = 400.0
 texture_normal = SubResource("AtlasTexture_play")
+
+[node name="ScoreButton" type="TextureButton" parent="TitleScreen"]
+offset_left = 148.0
+offset_top = 340.0
+offset_right = 264.0
+offset_bottom = 400.0
+texture_normal = SubResource("AtlasTexture_score")
 
 [node name="GetReadyScreen" type="Control" parent="."]
 visible = false
