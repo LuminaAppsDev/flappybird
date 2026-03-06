@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gdlint --help)",
+      "Bash(gdlint --version)",
+      "Bash(pip show gdtoolkit)",
+      "Bash(gdlint -d)",
+      "Bash(gdlint .)",
+      "Bash(gdformat --check .)"
+    ]
+  }
+}

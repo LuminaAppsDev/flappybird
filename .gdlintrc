@@ -1,2 +1,3 @@
 max-line-length: 100
-tab-size: 4
+tab-characters: 1
+max-function-lines: 40
