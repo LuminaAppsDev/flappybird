@@ -3,7 +3,7 @@ extends Area2D
 
 signal hit
 
-@export var gravity: float = 900.0
+@export var fall_gravity: float = 900.0
 @export var flap_impulse: float = -280.0
 @export var max_fall_speed: float = 400.0
 @export var rotation_speed: float = 2.5
@@ -28,7 +28,7 @@ func _physics_process(delta: float) -> void:
 			position.y = _start_y + sin(_hover_time * 4.0) * 8.0
 		return
 
-	velocity += gravity * delta
+	velocity += fall_gravity * delta
 	velocity = min(velocity, max_fall_speed)
 	position.y += velocity * delta
 	_update_rotation(delta)
