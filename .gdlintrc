@@ -1,0 +1,8 @@
+[general]
+max-line-length = 100
+tab-size = 4
+
+[rules]
+function-name = snake_case
+class-name = PascalCase
+max-function-lines = 40
