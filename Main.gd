@@ -39,7 +39,9 @@ func _is_tap(event: InputEvent) -> bool:
 func _enter_title() -> void:
 	_state = State.TITLE
 	_world.reset()
-	_world.bird.position.x = 144.0
+	var title_y := 200.0 - _world.position.y
+	_world.bird.position = Vector2(144.0, title_y)
+	_world.bird._start_y = title_y
 	_gui.show_title()
 
 
