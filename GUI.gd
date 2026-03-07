@@ -5,6 +5,11 @@ signal play_pressed
 signal retry_pressed
 
 const SAVE_PATH := "user://highscore.cfg"
+const GAMEOVER_TEXT_FINAL_Y := 120.0
+const PANEL_FINAL_Y := 186.0
+const POP_DURATION := 0.3
+const SLIDE_DURATION := 0.6
+const PAUSE_BETWEEN := 0.4
 
 var _atlas: Texture2D = preload("res://assets/gfx/atlas.png")
 var _digit_regions: Array[Rect2] = []
@@ -16,11 +21,15 @@ var _best_score: int = 0
 @onready var _get_ready_screen: Control = $GetReadyScreen
 @onready var _score_container: Node2D = $ScoreContainer
 @onready var _game_over_screen: Control = $GameOverScreen
+@onready var _game_over_text: TextureRect = $GameOverScreen/GameOverText
 @onready var _panel_container: Node2D = $GameOverScreen/PanelContainer
 @onready var _medal_sprite: Sprite2D = $GameOverScreen/PanelContainer/Medal
 @onready var _current_score_node: Node2D = $GameOverScreen/PanelContainer/CurrentScore
 @onready var _best_score_node: Node2D = $GameOverScreen/PanelContainer/BestScore
 @onready var _new_badge: Sprite2D = $GameOverScreen/PanelContainer/NewBadge
+@onready var _play_button: TextureButton = $GameOverScreen/PlayButton
+@onready var _score_button: TextureButton = $GameOverScreen/ScoreButton
+@onready var _swoosh: AudioStreamPlayer = $SwooshSound
 
 
 func _ready() -> void:
@@ -66,6 +75,11 @@ func show_game_over(final_score: int) -> void:
 	_render_panel_digits(_best_score_node, _best_score)
 	_update_medal(final_score)
 	_new_badge.visible = is_new_best
+
+	_play_button.visible = false
+	_score_button.visible = false
+	_panel_container.visible = false
+	_animate_game_over()
 
 
 func update_score(value: int) -> void:
@@ -209,9 +223,40 @@ func _on_button_up(button: TextureButton) -> void:
 	button.position.y -= 1.0
 
 
+func _animate_game_over() -> void:
+	_game_over_text.pivot_offset = _game_over_text.size / 2.0
+	_game_over_text.scale = Vector2.ZERO
+	_swoosh.play()
+
+	var tween := create_tween()
+	(
+		tween
+		. tween_property(_game_over_text, "scale", Vector2.ONE, POP_DURATION)
+		. set_ease(Tween.EASE_OUT)
+		. set_trans(Tween.TRANS_BACK)
+	)
+	tween.tween_interval(PAUSE_BETWEEN)
+	tween.tween_callback(_swoosh.play)
+	tween.tween_callback(func() -> void: _panel_container.visible = true)
+	_panel_container.position.y = 520.0
+	(
+		tween
+		. tween_property(_panel_container, "position:y", PANEL_FINAL_Y, SLIDE_DURATION)
+		. set_ease(Tween.EASE_OUT)
+		. set_trans(Tween.TRANS_CUBIC)
+	)
+	tween.tween_callback(
+		func() -> void:
+			_play_button.visible = true
+			_score_button.visible = true
+	)
+
+
 func _on_play_button_pressed() -> void:
+	_swoosh.play()
 	play_pressed.emit()
 
 
 func _on_retry_button_pressed() -> void:
+	_swoosh.play()
 	retry_pressed.emit()

@@ -6,7 +6,8 @@
       "Bash(pip show gdtoolkit)",
       "Bash(gdlint -d)",
       "Bash(gdlint .)",
-      "Bash(gdformat --check .)"
+      "Bash(gdformat --check .)",
+      "Bash(gdformat GUI.gd)"
     ]
   }
 }

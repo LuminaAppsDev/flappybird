@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="CompressedTexture2D" uid="uid://ccmjan2kr454f" path="res://assets/gfx/atlas.png" id="1_atlas"]
 [ext_resource type="Script" path="res://GUI.gd" id="2_script"]
+[ext_resource type="AudioStreamOggVorbis" uid="uid://cxg5h7wepxs6k" path="res://assets/sounds/sfx_swooshing.ogg" id="3_swoosh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_title"]
 atlas = ExtResource("1_atlas")
@@ -182,6 +183,9 @@ offset_top = 340.0
 offset_right = 264.0
 offset_bottom = 400.0
 texture_normal = SubResource("AtlasTexture_score")
+
+[node name="SwooshSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_swoosh")
 
 [connection signal="pressed" from="TitleScreen/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="GameOverScreen/PlayButton" to="." method="_on_retry_button_pressed"]
