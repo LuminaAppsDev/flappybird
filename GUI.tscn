@@ -155,7 +155,7 @@ texture = SubResource("AtlasTexture_panel")
 centered = false
 
 [node name="Medal" type="Sprite2D" parent="GameOverScreen/PanelContainer"]
-position = Vector2(55, 64)
+position = Vector2(55, 65)
 visible = false
 
 [node name="CurrentScore" type="Node2D" parent="GameOverScreen/PanelContainer"]
@@ -165,7 +165,7 @@ position = Vector2(210, 46)
 position = Vector2(210, 89)
 
 [node name="NewBadge" type="Sprite2D" parent="GameOverScreen/PanelContainer"]
-position = Vector2(157, 82)
+position = Vector2(157, 68)
 visible = false
 texture = SubResource("AtlasTexture_new")
 
