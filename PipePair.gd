@@ -3,10 +3,23 @@ extends Node2D
 
 signal passed
 
+const DESIGN_HEIGHT := 512.0
+
 @export var speed: float = 100.0
 
 var _scored: bool = false
 var _active: bool = true
+
+
+func _ready() -> void:
+	var extra := get_viewport_rect().size.y - DESIGN_HEIGHT
+	if extra <= 0.0:
+		return
+	var ext := Sprite2D.new()
+	ext.texture = $TopPipe/Sprite2D.texture
+	ext.flip_v = true
+	ext.position = Vector2(0.0, -320.0)
+	$TopPipe.add_child(ext)
 
 
 func _physics_process(delta: float) -> void:
