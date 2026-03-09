@@ -8,7 +8,10 @@
       "Bash(gdlint .)",
       "Bash(gdformat --check .)",
       "Bash(gdformat GUI.gd)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:migueldeicaza.github.io)",
+      "Bash(gdformat Main.gd)"
     ]
   }
 }
