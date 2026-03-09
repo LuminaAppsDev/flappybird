@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://cb7wol3kti0ht"]
 
-[ext_resource type="Script" path="res://Main.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://bjsh0lpivu4bc" path="res://Main.gd" id="1_script"]
 [ext_resource type="PackedScene" path="res://World.tscn" id="2_world"]
 [ext_resource type="PackedScene" path="res://GUI.tscn" id="3_gui"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" unique_id=164173212]
 script = ExtResource("1_script")
 
-[node name="World" parent="." instance=ExtResource("2_world")]
+[node name="World" parent="." unique_id=1116841199 instance=ExtResource("2_world")]
 
-[node name="GUI" parent="." instance=ExtResource("3_gui")]
+[node name="GUI" parent="." unique_id=768566022 instance=ExtResource("3_gui")]

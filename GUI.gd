@@ -3,6 +3,8 @@ extends CanvasLayer
 
 signal play_pressed
 signal retry_pressed
+signal score_button_pressed
+signal new_best_score(score: int)
 
 const SAVE_PATH := "user://highscore.cfg"
 const GAMEOVER_TEXT_FINAL_Y := 120.0
@@ -66,6 +68,7 @@ func show_game_over(final_score: int) -> void:
 	if is_new_best:
 		_best_score = final_score
 		_save_best_score()
+		new_best_score.emit(final_score)
 
 	_get_ready_screen.visible = false
 	_score_container.visible = false
@@ -260,3 +263,8 @@ func _on_play_button_pressed() -> void:
 func _on_retry_button_pressed() -> void:
 	_swoosh.play()
 	retry_pressed.emit()
+
+
+func _on_score_button_pressed() -> void:
+	_swoosh.play()
+	score_button_pressed.emit()

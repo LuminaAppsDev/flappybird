@@ -16,6 +16,10 @@ config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/image="uid://chtsevqmaiu8x"
 config/icon="uid://b7wa5dxbaihp7"
 
+[autoload]
+
+GodotPlayGameServices="*uid://bkqwvp4gat7lf"
+
 [display]
 
 window/size/viewport_width=288
@@ -25,6 +29,10 @@ window/size/window_height_override=1024
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/handheld/orientation=1
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/GodotPlayGameServices/plugin.cfg")
 
 [physics]
 

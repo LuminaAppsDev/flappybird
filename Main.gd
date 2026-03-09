@@ -3,17 +3,34 @@ extends Node
 
 enum State { TITLE, GET_READY, PLAYING, GAME_OVER }
 
+const LEADERBOARD_ID := "CgkI2ZWTjPMBEAIQAQ"
+
 var _state: State = State.TITLE
+var _signed_in := false
+var _leaderboards_client: PlayGamesLeaderboardsClient
+var _sign_in_client: PlayGamesSignInClient
 
 @onready var _world: Node2D = $World
 @onready var _gui: CanvasLayer = $GUI
 
 
+func _enter_tree() -> void:
+	GodotPlayGameServices.initialize()
+
+
 func _ready() -> void:
+	_leaderboards_client = PlayGamesLeaderboardsClient.new()
+	add_child(_leaderboards_client)
+	_sign_in_client = PlayGamesSignInClient.new()
+	add_child(_sign_in_client)
+	_sign_in_client.user_authenticated.connect(_on_user_authenticated)
+	_sign_in_client.is_authenticated()
 	_world.game_over.connect(_on_game_over)
 	_world.score_changed.connect(_on_score_changed)
 	_gui.play_pressed.connect(_on_play_pressed)
 	_gui.retry_pressed.connect(_on_retry_pressed)
+	_gui.score_button_pressed.connect(_on_score_button_pressed)
+	_gui.new_best_score.connect(_on_new_best_score)
 	_enter_title()
 
 
@@ -57,9 +74,18 @@ func _enter_playing() -> void:
 	_world.start_game()
 
 
+func _on_user_authenticated(is_authenticated: bool) -> void:
+	_signed_in = is_authenticated
+
+
 func _on_game_over() -> void:
 	_state = State.GAME_OVER
 	_gui.show_game_over(_world.score)
+
+
+func _on_new_best_score(score: int) -> void:
+	if _signed_in and score > 0:
+		_leaderboards_client.submit_score(LEADERBOARD_ID, score)
 
 
 func _on_score_changed(new_score: int) -> void:
@@ -72,3 +98,10 @@ func _on_play_pressed() -> void:
 
 func _on_retry_pressed() -> void:
 	_enter_get_ready()
+
+
+func _on_score_button_pressed() -> void:
+	if _signed_in:
+		_leaderboards_client.show_leaderboard(LEADERBOARD_ID)
+	else:
+		_sign_in_client.sign_in()

@@ -188,4 +188,6 @@ texture_normal = SubResource("AtlasTexture_score")
 stream = ExtResource("3_swoosh")
 
 [connection signal="pressed" from="TitleScreen/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="TitleScreen/ScoreButton" to="." method="_on_score_button_pressed"]
 [connection signal="pressed" from="GameOverScreen/PlayButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="GameOverScreen/ScoreButton" to="." method="_on_score_button_pressed"]

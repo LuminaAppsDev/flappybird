@@ -7,7 +7,8 @@
       "Bash(gdlint -d)",
       "Bash(gdlint .)",
       "Bash(gdformat --check .)",
-      "Bash(gdformat GUI.gd)"
+      "Bash(gdformat GUI.gd)",
+      "WebSearch"
     ]
   }
 }
