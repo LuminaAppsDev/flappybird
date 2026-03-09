@@ -116,7 +116,7 @@ func _on_new_best_score(score: int) -> void:
 
 
 func _submit_game_center_score(score: int) -> void:
-	var gk_lb := ClassDB.instantiate(&"GKLeaderboard")
+	var gk_lb = ClassDB.instantiate(&"GKLeaderboard")
 	gk_lb.call(
 		"load_leaderboards",
 		PackedStringArray([IOS_LEADERBOARD_ID]),
@@ -157,5 +157,5 @@ func _show_leaderboard() -> void:
 	if _platform == "Android":
 		_leaderboards_client.show_leaderboard(ANDROID_LEADERBOARD_ID)
 	elif _platform == "iOS":
-		var gk_vc := ClassDB.instantiate(&"GKGameCenterViewController")
+		var gk_vc = ClassDB.instantiate(&"GKGameCenterViewController")
 		gk_vc.call("show_leaderboard_time_period", IOS_LEADERBOARD_ID, 0, 2)
