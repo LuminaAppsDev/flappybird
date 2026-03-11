@@ -8,6 +8,8 @@ All notable changes to this project are documented in this file.
 
 ### Fixed
 
+- Prevent bird to fly too high
+
 ### Changed
 
 ### Removed

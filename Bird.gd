@@ -44,6 +44,11 @@ func _physics_process(delta: float) -> void:
 	velocity += fall_gravity * delta
 	velocity = min(velocity, max_fall_speed)
 	position.y += velocity * delta
+	# Prevent the bird to go too high
+	var top_limit: float = get_viewport_rect().position.y
+	if position.y < top_limit:
+		position.y = top_limit
+		velocity = 0.0
 	_update_rotation(delta)
 
 
