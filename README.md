@@ -22,9 +22,9 @@ For the export as Android package bundle the Java JDK needs to be installed.
 
 On a Debian/Ubuntu system:
 
-'''sh
+```sh
 sudo apt-get install openjdk-21-jdk
-'''
+```
 
 The path in Godot is then set to "/usr/lib/jvm/java-21-openjdk-amd64", in
 "Editor Settings - Export - Android - Java SDK Path".
@@ -61,9 +61,9 @@ Android Debug Bridge (ADB) and Google's "Bundletool" are needed.
 
 The ADB can be installed via:
 
-'''sh
+```sh
 sudo apt-get install android-tools-adb
-'''
+```
 
 and the Bundletool needs to be manually downloaded from:
 
@@ -74,7 +74,7 @@ install it via ADB.
 Assuming both the bundle file and the keystore for signing the packages are
 located in the home directory:
 
-'''sh
+```sh
 bundletool build-apks \
 --overwrite \
 --ks=play-store_release-key.keystore \
@@ -82,13 +82,13 @@ bundletool build-apks \
 --ks-pass=pass:'MyKeyPassw0rd' \
 --bundle=flappybird2026.aab \
 --output=flappybird2026.apks
-'''
+```
 
 The package can then be installed on a connected device via:
 
-'''sh
+```sh
 bundletool install-apks --apks=flappybird2026.apks
-'''
+```
 
 ### Apple iOS export
 
