@@ -8,11 +8,15 @@ All notable changes to this project are documented in this file.
 
 ### Fixed
 
-- Prevent bird to fly too high
-
 ### Changed
 
 ### Removed
+
+## 1.3.0 - 2026-03-09
+
+### Fixed
+
+- Prevent bird to fly too high
 
 ## 1.2.0 - 2026-03-09
 
