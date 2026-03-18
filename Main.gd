@@ -14,6 +14,7 @@ func _ready() -> void:
 	_world.score_changed.connect(_on_score_changed)
 	_gui.play_pressed.connect(_on_play_pressed)
 	_gui.retry_pressed.connect(_on_retry_pressed)
+	_gui.rate_button_pressed.connect(_on_rate_button_pressed)
 	_enter_title()
 
 
@@ -64,6 +65,10 @@ func _on_game_over() -> void:
 
 func _on_score_changed(new_score: int) -> void:
 	_gui.update_score(new_score)
+
+
+func _on_rate_button_pressed() -> void:
+	OS.shell_open("https://github.com/LuminaAppsDev/flappybird")
 
 
 func _on_play_pressed() -> void:

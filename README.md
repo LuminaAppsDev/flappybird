@@ -171,3 +171,26 @@ macos.x86_64 = {
     "res://addons/GodotApplePlugins/bin/SwiftGodotRuntime_x64.framework" : "Contents/Frameworks"
 }
 ```
+
+### PWA export
+
+For an export as Progressive Web App select "Web" as export profile.
+
+IMPORTANT:
+Before exporting the app as PWA, edit the configuration in project.godot
+and set:
+
+```ini
+[display]
+window/stretch/aspect="keep"
+```
+
+In the export profile options set:
+
+- "Export Path": The path to save the files to
+- "VRAM Texture Compression" - "For Mobile": On
+- "Progressive Web App" - "Enabled": On
+- "Orientation": Portrait
+- "Icon 144x 144": Flappy_Bird_icon-144.png
+- "Icon 180x 180": Flappy_Bird_icon-180.png
+- "Icon 512x 512": Flappy_Bird_icon-512.png
