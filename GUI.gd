@@ -4,6 +4,7 @@ extends CanvasLayer
 signal play_pressed
 signal retry_pressed
 signal score_button_pressed
+signal rate_button_pressed
 signal new_best_score(score: int)
 
 const SAVE_PATH := "user://highscore.cfg"
@@ -29,6 +30,7 @@ var _best_score: int = 0
 @onready var _current_score_node: Node2D = $GameOverScreen/PanelContainer/CurrentScore
 @onready var _best_score_node: Node2D = $GameOverScreen/PanelContainer/BestScore
 @onready var _new_badge: Sprite2D = $GameOverScreen/PanelContainer/NewBadge
+@onready var _title_play_button: TextureButton = $TitleScreen/PlayButton
 @onready var _play_button: TextureButton = $GameOverScreen/PlayButton
 @onready var _score_button: TextureButton = $GameOverScreen/ScoreButton
 @onready var _swoosh: AudioStreamPlayer = $SwooshSound
@@ -46,6 +48,7 @@ func show_title() -> void:
 	_get_ready_screen.visible = false
 	_score_container.visible = false
 	_game_over_screen.visible = false
+	_title_play_button.grab_focus()
 
 
 func show_get_ready() -> void:
@@ -252,6 +255,7 @@ func _animate_game_over() -> void:
 		func() -> void:
 			_play_button.visible = true
 			_score_button.visible = true
+			_play_button.grab_focus()
 	)
 
 
@@ -268,3 +272,8 @@ func _on_retry_button_pressed() -> void:
 func _on_score_button_pressed() -> void:
 	_swoosh.play()
 	score_button_pressed.emit()
+
+
+func _on_rate_button_pressed() -> void:
+	_swoosh.play()
+	rate_button_pressed.emit()
