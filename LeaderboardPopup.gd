@@ -8,6 +8,11 @@ const PROFILE_AVATAR_SIZE := 32
 
 var _avatar_rects: Dictionary = {}
 
+# Workaround: iOS WebKit does not show the on-screen keyboard when tapping
+# Godot's LineEdit (rendered on <canvas>). WebKeyboardHelper creates a hidden
+# HTML <input> that iOS recognises, so the keyboard appears.
+var _web_kb: WebKeyboardHelper
+
 @onready var _username_label: Label = $Panel/VBox/ProfileSection/UsernameLabel
 @onready var _avatar_rect: TextureRect = $Panel/VBox/ProfileSection/AvatarRect
 @onready var _edit_button: Button = $Panel/VBox/ProfileSection/EditButton
@@ -28,6 +33,7 @@ func _ready() -> void:
 	_confirm_button.pressed.connect(_on_confirm_username)
 	_cancel_button.pressed.connect(_on_cancel_edit)
 	_dimmer.gui_input.connect(_on_dimmer_input)
+	_setup_web_keyboard()
 
 
 func open() -> void:
@@ -143,7 +149,12 @@ func _on_avatar_loaded(target_uuid: String, texture: ImageTexture) -> void:
 func _on_edit_pressed() -> void:
 	_name_input.text = RanksClient.username
 	_edit_panel.visible = true
-	_name_input.grab_focus()
+	# iOS WebKit workaround: focus the hidden HTML <input> so the keyboard
+	# appears, then sync typed text back into the Godot LineEdit.
+	if _web_kb:
+		_web_kb.request_keyboard(RanksClient.username, 32)
+	else:
+		_name_input.grab_focus()
 
 
 func _on_confirm_username() -> void:
@@ -151,11 +162,15 @@ func _on_confirm_username() -> void:
 	if new_name.length() < 3 or new_name.length() > 32:
 		return
 	_edit_panel.visible = false
+	if _web_kb:
+		_web_kb.dismiss_keyboard()
 	RanksClient.change_username(new_name)
 
 
 func _on_cancel_edit() -> void:
 	_edit_panel.visible = false
+	if _web_kb:
+		_web_kb.dismiss_keyboard()
 
 
 func _on_username_changed(new_name: String) -> void:
@@ -187,6 +202,39 @@ func _append_personal_row(entries: Array, displayed: int) -> void:
 	var row := _create_entry_row(personal_entry)
 	_entries_container.add_child(row)
 	RanksClient.fetch_avatar(RanksClient.uuid)
+
+
+func _setup_web_keyboard() -> void:
+	# iOS WebKit workaround: only instantiate the helper on iOS web/PWA.
+	# Adding it on other platforms (e.g. Android web) would interfere with
+	# Godot's native virtual keyboard handling.
+	if not OS.has_feature("web"):
+		return
+	var helper := WebKeyboardHelper.new()
+	add_child(helper)
+	if not helper.is_active:
+		helper.queue_free()
+		return
+	_web_kb = helper
+	_web_kb.text_changed.connect(_on_web_kb_text_changed)
+	_web_kb.text_submitted.connect(_on_web_kb_text_submitted)
+	# Re-trigger the keyboard when the user taps the LineEdit after it lost
+	# focus (e.g. tapped outside and then back in).
+	_name_input.focus_entered.connect(_on_name_input_refocused)
+
+
+func _on_name_input_refocused() -> void:
+	if _web_kb and _edit_panel.visible:
+		_web_kb.request_keyboard(_name_input.text, 32)
+
+
+func _on_web_kb_text_changed(text: String) -> void:
+	_name_input.text = text
+
+
+func _on_web_kb_text_submitted(text: String) -> void:
+	_name_input.text = text
+	_on_confirm_username()
 
 
 func _apply_label_style(label: Label, size: int) -> void:
