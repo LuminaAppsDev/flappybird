@@ -6,11 +6,34 @@ A remake of the mobile game "Flappy Bird" from 2013.
 Making use of modern tech stacks, aimed for crossplatform release.
 The goal is a remake which is as close 1:1 to the original.
 
+## Stack
+
+- **Language:** GDScript (Godot 4.6)
+- **Build system:** Godot editor — exports for Android (.aab), iOS (.xcodeproj), Web/PWA
+
+## Entry points:
+
+```
+Main.gd — main game controller
+World.gd — game world logic
+GUI.gd — UI controller
+```
+
 ## Directory Layout
 
 ```
-assets/gfx/        → contains the atlas with all images used in the game
-assets/sounds/     → audio files used in the game
+assets/gfx/ — sprite atlas and image assets
+assets/sounds/ — audio effects (wing, hit, point, die, swooshing)
+addons/ — Google Play Games Services + Apple Game Center plugins
+android/ — Android build artifacts
+```
+
+## Dependencies
+
+```
+GodotPlayGameServices (Google Play leaderboard)
+GodotApplePlugins (Apple Game Center)
+Godot 4.6 engine
 ```
 
 ## Essential Commands
