@@ -195,7 +195,7 @@ func _on_score_completed(
 	if json == null or not json is Dictionary:
 		score_submitted.emit(-1)
 		return
-	score_submitted.emit(json.get("rank", -1))
+	score_submitted.emit(int(json.get("rank", -1)))
 
 
 func _on_leaderboard_completed(

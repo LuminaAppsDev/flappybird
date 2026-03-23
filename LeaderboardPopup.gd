@@ -53,7 +53,7 @@ func open() -> void:
 	if not RanksClient.username_changed.is_connected(_on_username_changed):
 		RanksClient.username_changed.connect(_on_username_changed)
 
-	RanksClient.fetch_leaderboard(10)
+	RanksClient.fetch_leaderboard(100)
 
 
 func close() -> void:
@@ -78,7 +78,9 @@ func _on_leaderboard_loaded(entries: Array) -> void:
 		_entries_container.add_child(empty_label)
 		return
 
-	for entry: Variant in entries:
+	var display_count := mini(entries.size(), 10)
+	for i in display_count:
+		var entry: Variant = entries[i]
 		if not entry is Dictionary:
 			continue
 		var row := _create_entry_row(entry)
@@ -87,13 +89,16 @@ func _on_leaderboard_loaded(entries: Array) -> void:
 		if not entry_uuid.is_empty():
 			RanksClient.fetch_avatar(entry_uuid)
 
+	_append_personal_row(entries, display_count)
+
 
 func _create_entry_row(entry: Dictionary) -> HBoxContainer:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 4)
 
 	var rank_label := Label.new()
-	rank_label.text = str(entry.get("rank", ""))
+	var rank_val: int = int(entry.get("rank", 0))
+	rank_label.text = str(rank_val) if rank_val > 0 else "-"
 	rank_label.custom_minimum_size.x = 20
 	rank_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_apply_label_style(rank_label, 9)
@@ -117,7 +122,7 @@ func _create_entry_row(entry: Dictionary) -> HBoxContainer:
 	row.add_child(name_label)
 
 	var score_label := Label.new()
-	score_label.text = str(entry.get("score", 0))
+	score_label.text = str(int(entry.get("score", 0)))
 	score_label.custom_minimum_size.x = 40
 	score_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_apply_label_style(score_label, 9)
@@ -160,6 +165,28 @@ func _on_username_changed(new_name: String) -> void:
 func _on_dimmer_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		close()
+
+
+func _append_personal_row(entries: Array, displayed: int) -> void:
+	if not RanksClient.is_registered:
+		return
+	var personal_entry: Dictionary = {}
+	for entry: Variant in entries:
+		if entry is Dictionary and entry.get("uuid", "") == RanksClient.uuid:
+			personal_entry = entry
+			break
+	if personal_entry.is_empty():
+		return
+	if int(personal_entry.get("rank", 0)) <= displayed:
+		return
+
+	var sep := HSeparator.new()
+	sep.add_theme_constant_override("separation", 4)
+	_entries_container.add_child(sep)
+
+	var row := _create_entry_row(personal_entry)
+	_entries_container.add_child(row)
+	RanksClient.fetch_avatar(RanksClient.uuid)
 
 
 func _apply_label_style(label: Label, size: int) -> void:
