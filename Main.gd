@@ -17,6 +17,9 @@ var _sign_in_client: PlayGamesSignInClient
 # iOS (Game Center) — untyped to avoid parse errors on non-Apple platforms
 var _game_center = null
 
+# Web (PWA leaderboard)
+var _leaderboard_popup: Control = null
+
 @onready var _world: Node2D = $World
 @onready var _gui: CanvasLayer = $GUI
 
@@ -31,6 +34,8 @@ func _ready() -> void:
 		_setup_play_games()
 	elif _platform == "iOS":
 		_setup_game_center()
+	elif _platform == "Web":
+		_setup_web_leaderboard()
 	_world.game_over.connect(_on_game_over)
 	_world.score_changed.connect(_on_score_changed)
 	_gui.play_pressed.connect(_on_play_pressed)
@@ -56,6 +61,15 @@ func _setup_game_center() -> void:
 	_game_center = ClassDB.instantiate(&"GameCenterManager")
 	_game_center.authentication_result.connect(_on_user_authenticated)
 	_game_center.authenticate()
+
+
+func _setup_web_leaderboard() -> void:
+	_leaderboard_popup = preload("res://LeaderboardPopup.tscn").instantiate()
+	_gui.add_child(_leaderboard_popup)
+	if RanksClient.is_registered:
+		_signed_in = true
+	else:
+		RanksClient.registered.connect(func(success: bool) -> void: _signed_in = success)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -114,6 +128,8 @@ func _on_new_best_score(score: int) -> void:
 		_leaderboards_client.submit_score(ANDROID_LEADERBOARD_ID, score)
 	elif _platform == "iOS":
 		_submit_game_center_score(score)
+	elif _platform == "Web":
+		RanksClient.submit_score(score)
 
 
 func _submit_game_center_score(score: int) -> void:
@@ -144,15 +160,21 @@ func _on_rate_button_pressed() -> void:
 
 
 func _on_play_pressed() -> void:
+	if _platform == "Web" and _signed_in:
+		RanksClient.create_session()
 	_enter_get_ready()
 
 
 func _on_retry_pressed() -> void:
+	if _platform == "Web" and _signed_in:
+		RanksClient.create_session()
 	_enter_get_ready()
 
 
 func _on_score_button_pressed() -> void:
-	if _signed_in:
+	if _platform == "Web":
+		_leaderboard_popup.open()
+	elif _signed_in:
 		_show_leaderboard()
 	elif _platform == "Android":
 		_sign_in_client.sign_in()
@@ -164,3 +186,5 @@ func _show_leaderboard() -> void:
 	elif _platform == "iOS":
 		var gk_vc = ClassDB.instantiate(&"GKGameCenterViewController")
 		gk_vc.call("show_leaderboard_time_period", IOS_LEADERBOARD_ID, 0, 2)
+	elif _platform == "Web":
+		_leaderboard_popup.open()

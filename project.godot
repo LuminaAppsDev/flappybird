@@ -19,6 +19,7 @@ config/icon="uid://b7wa5dxbaihp7"
 [autoload]
 
 GodotPlayGameServices="*uid://bkqwvp4gat7lf"
+RanksClient="*res://RanksClient.gd"
 
 [display]
 
