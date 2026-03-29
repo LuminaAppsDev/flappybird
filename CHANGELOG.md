@@ -6,14 +6,18 @@ All notable changes to this project are documented in this file.
 
 ### Added
 
-- PWA export support
-- Custom leaderboard system for PWA version
-
 ### Fixed
 
 ### Changed
 
 ### Removed
+
+### 1.3.1 - 2026-03-29
+
+### Added
+
+- PWA export support
+- Custom leaderboard system for PWA version
 
 ## 1.3.0 - 2026-03-09
 
